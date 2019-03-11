@@ -4,7 +4,8 @@ require 'pry'
   #set items details from array
   #save details in a hash
   #add requested line items into a basket
-  #print receipt base on basket information
+  #Ask user if they want to order something else.
+  #If yes: repeat menu. If no: print receipt
 
 class Receipt
   def initialize
@@ -19,7 +20,7 @@ class Receipt
       clean_input(input)
       set_requested_line_items_details(input)
       add_to_basket(@requested_line_items)
-      receipt(@basket)
+      again
     else
       puts 'NOT ENOUGH INFORMARTION. Enter quantity, product and price. (Example: 2 book at 12.49)'
       menu
@@ -66,6 +67,20 @@ class Receipt
     puts "************************"
   end
 
+  def again
+    puts "Would you like to add something else?(yes / no)"
+    answer = gets.chomp().downcase
+    if answer == "yes"
+      menu
+    elsif answer == "no"
+      receipt(@basket)
+      exit
+    else
+      puts "The only options are yes or no."
+      again
+    end
+  end
+
   private
 
   def clean_input(input)
@@ -75,7 +90,6 @@ class Receipt
   def sales_tax_rounding(taxes_amount)
     (taxes_amount * 20).ceil / 20.00
   end
-
 end
 
 Receipt.new.menu
